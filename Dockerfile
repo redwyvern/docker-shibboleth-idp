@@ -7,12 +7,14 @@ ARG IMAGE_TZ=America/New_York
 USER root
 RUN echo ${IMAGE_TZ} > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata
 
-ARG IDP_HOST_NAME=shibboleth-idp
-ARG IDP_DOMAIN_NAME=localdomain
+ARG IDP_HOST_NAME=idp
+ARG IDP_DOMAIN_NAME=weedon.int
 
 # TODO: Fix security issue
 ARG BACKCHANNEL_PKCS12_PASSWORD=password
 ARG COOKIE_ENCRYPTION_KEY_PASSWORD=password
+
+COPY conf/server.xml /usr/local/tomcat/conf/server.xml
 
 RUN apt-get clean && apt-get update && apt-get install -y --no-install-recommends \
     curl
@@ -25,9 +27,8 @@ RUN sed -i "s/==IDP_HOST_NAME==/${IDP_HOST_NAME}/g" /tmp/merge.properties && \
 RUN cd /opt && \
     echo Downloading Shibboleth IDP software package... && \
     curl -s -O https://shibboleth.net/downloads/identity-provider/latest/shibboleth-identity-provider-3.2.1.tar.gz && \
-    tar -xzf shibboleth-identity-provider-3.2.1.tar.gz && \
-    cd /opt/shibboleth-identity-provider-3.2.1/bin && \
-    ./install.sh \
+    tar -xzf shibboleth-identity-provider-3.2.1.tar.gz && rm shibboleth-identity-provider-3.2.1.tar.gz && \
+    cd /opt/shibboleth-identity-provider-3.2.1/bin && ./install.sh \
       -Didp.src.dir=/opt/shibboleth-identity-provider-3.2.1 \
       -Didp.target.dir=/opt/shibboleth-idp \
       -Didp.host.name=${IDP_HOST_NAME}.${IDP_DOMAIN_NAME} \
@@ -35,6 +36,7 @@ RUN cd /opt && \
       -Didp.scope=${IDP_DOMAIN_NAME} \
       -Didp.keystore.password=$BACKCHANNEL_PKCS12_PASSWORD \
       -Didp.sealer.password=$COOKIE_ENCRYPTION_KEY_PASSWORD \
-      -Didp.merge.properties=/tmp/merge.properties
+      -Didp.merge.properties=/tmp/merge.properties && \
+    cd /opt && rm -r shibboleth-identity-provider-3.2.1 && \
+    mv /opt/shibboleth-idp/war/idp.war /usr/local/tomcat/webapps
 
-      
