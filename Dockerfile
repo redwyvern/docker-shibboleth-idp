@@ -13,7 +13,7 @@ ARG IDP_DOMAIN_NAME=weedon.int
 # TODO: Fix security issue
 ARG BACKCHANNEL_PKCS12_PASSWORD=password
 ARG COOKIE_ENCRYPTION_KEY_PASSWORD=password
-ARG SHIBBOLETH_VERSION=3.2.2
+ARG SHIBBOLETH_VERSION=3.3.2
 
 COPY conf/server.xml /usr/local/tomcat/conf/server.xml
 
