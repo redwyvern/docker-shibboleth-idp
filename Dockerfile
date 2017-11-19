@@ -26,7 +26,7 @@ RUN sed -i "s/==IDP_HOST_NAME==/${IDP_HOST_NAME}/g" /tmp/merge.properties && \
 
 RUN cd /opt && \
     echo Downloading Shibboleth IDP software package... && \
-    curl -s -O https://shibboleth.net/downloads/identity-provider/latest/shibboleth-identity-provider-3.2.1.tar.gz && \
+    curl -s -O https://shibboleth.net/downloads/identity-provider/latest/shibboleth-identity-provider-3.3.2.tar.gz && \
     tar -xzf shibboleth-identity-provider-3.2.1.tar.gz && rm shibboleth-identity-provider-3.2.1.tar.gz && \
     cd /opt/shibboleth-identity-provider-3.2.1/bin && ./install.sh \
       -Didp.src.dir=/opt/shibboleth-identity-provider-3.2.1 \
