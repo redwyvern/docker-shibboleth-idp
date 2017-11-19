@@ -26,7 +26,7 @@ RUN sed -i "s/==IDP_HOST_NAME==/${IDP_HOST_NAME}/g" /tmp/merge.properties && \
     sed -i "s/==IDP_DOMAIN_NAME==/${IDP_DOMAIN_NAME}/g" /tmp/merge.properties
 
 RUN cd /opt && \
-    echo Downloading Shibboleth IDP software package... && \
+    echo Downloading Shibboleth IDP v${SHIBBOLETH_VERSION} software package... && \
     curl -s -O https://shibboleth.net/downloads/identity-provider/latest/shibboleth-identity-provider-${SHIBBOLETH_VERSION}.tar.gz && \
     tar -xzf shibboleth-identity-provider-${SHIBBOLETH_VERSION}.tar.gz && rm shibboleth-identity-provider-${SHIBBOLETH_VERSION}.tar.gz && \
     cd /opt/shibboleth-identity-provider-${SHIBBOLETH_VERSION}/bin && ./install.sh \
